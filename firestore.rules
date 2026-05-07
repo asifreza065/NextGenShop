@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ---------------------------------------------------------
+    // HELPERS
+    // ---------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ---------------------------------------------------------
+    // USERS
+    // ---------------------------------------------------------
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.uid == request.auth.uid 
+          && data.email is string && data.email.size() > 0 
+          && (data.displayName == null || (data.displayName is string && data.displayName.size() <= 100))
+          && data.keys().hasAll(['uid', 'email', 'createdAt']);
+      }
+
+      allow get: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidUser(incoming()) 
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL']);
+    }
+
+    // ---------------------------------------------------------
+    // PRODUCTS
+    // ---------------------------------------------------------
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // ORDERS
+    // ---------------------------------------------------------
+    match /orders/{orderId} {
+      function isValidOrder(data) {
+        return data.orderId is string
+          && data.userId == request.auth.uid
+          && data.total is number
+          && data.items is list
+          && data.keys().hasAll(['orderId', 'userId', 'total', 'items', 'orderStatus', 'createdAt']);
+      }
+
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      
+      allow create: if isSignedIn() 
+        && incoming().userId == request.auth.uid 
+        && isValidOrder(incoming());
+        
+      allow update: if isAdmin() 
+        && incoming().diff(existing()).affectedKeys().hasAny(['orderStatus', 'paymentStatus']);
+        
+      allow delete: if false; // Orders should generally not be deleted
+    }
+
+    // ---------------------------------------------------------
+    // ADMINS (Whitelist)
+    // ---------------------------------------------------------
+    match /admins/{adminId} {
+      allow read: if isSignedIn(); // Need to check if user exists in admin list
+      allow write: if false; // Managed manually or via cloud console
+    }
+  }
+}
