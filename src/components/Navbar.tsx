@@ -4,6 +4,8 @@ import { ShoppingCart, Search, User, Menu, X, Trash2, Plus, Minus, Clock, Chevro
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Product } from '../types';
 import { PRODUCTS } from '../constants';
+import { auth, logout } from '../lib/firebase';
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 
 import Fuse from 'fuse.js';
 
@@ -27,6 +29,14 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
   const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const allProducts = products || PRODUCTS;
   const trendingSearches = ['Kitchen Set', 'Sustainable Bowls', 'Organic Cotton', 'Marble Tray', 'Ceramic Mug'];
@@ -380,9 +390,27 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
                 )}
                </AnimatePresence>
             </div>
-            <Link to="/account" className="p-2 hover:bg-brand-sage/10 rounded-full transition-colors text-brand-forest">
-              <User className="w-5 h-5" />
-            </Link>
+            {!currentUser ? (
+              <div className="flex items-center space-x-2">
+                <Link to="/login" className="px-4 py-2 text-sm font-medium text-brand-forest hover:text-brand-sage transition-colors">Login</Link>
+                <Link to="/login" className="px-4 py-2 text-sm font-medium bg-brand-forest text-white rounded-[2rem] hover:bg-brand-sage transition-colors">Create Account</Link>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1">
+                <Link to="/account" className="p-2 hover:bg-brand-sage/10 rounded-full transition-colors text-brand-forest" title="My Account">
+                  <User className="w-5 h-5" />
+                </Link>
+                <button 
+                  onClick={async () => {
+                    await logout();
+                    navigate('/');
+                  }} 
+                  className="px-3 py-1.5 text-xs font-medium text-rose-500 hover:bg-rose-50 rounded-full transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
             
             {isAdmin && (
               <div className="flex items-center space-x-1">
@@ -621,7 +649,26 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
                 </AnimatePresence>
               </div>
 
-              <Link to="/account" onClick={() => setIsMobileMenuOpen(false)}>My Account</Link>
+              {!currentUser ? (
+                <>
+                  <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
+                  <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Create Account</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/account" onClick={() => setIsMobileMenuOpen(false)}>My Account</Link>
+                  <button 
+                    onClick={async () => {
+                      setIsMobileMenuOpen(false);
+                      await logout();
+                      navigate('/');
+                    }} 
+                    className="text-left text-rose-500 font-bold"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
               {isAdmin && (
                 <Link to="/admin/orders" onClick={() => setIsMobileMenuOpen(false)} className="text-brand-sage font-black">Admin Dashboard</Link>
               )}

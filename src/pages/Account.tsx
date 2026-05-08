@@ -37,6 +37,18 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
   const [realOrders, setRealOrders] = useState<Order[]>([]);
   const [isOrdersLoading, setIsOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState<string | null>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        navigate('/login');
+      } else {
+        setIsCheckingAuth(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
@@ -356,6 +368,14 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
     { id: 'payment', label: 'Payment Methods', icon: CreditCard },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
+
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-10 h-10 text-brand-sage animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">

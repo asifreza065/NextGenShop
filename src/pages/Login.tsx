@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Chrome, 
@@ -14,8 +14,8 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signInWithGoogle, auth } from '../lib/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { signInWithGooglePopup, signInWithGoogleRedirect, auth } from '../lib/firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult } from 'firebase/auth';
 
 export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,6 +27,30 @@ export const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigate('/account');
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          navigate('/account');
+        }
+      } catch (err: any) {
+        console.error("Redirect Auth Error:", err);
+        setError('Google login failed. Please ensure the current domain is added to Firebase Authorized Domains in your project settings.');
+      }
+    };
+    handleRedirectResult();
+  }, [navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,16 +83,23 @@ export const Login: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await signInWithGoogle();
-      navigate('/account');
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        await signInWithGoogleRedirect();
+        return; // Will redirect
+      } else {
+        await signInWithGooglePopup();
+        navigate('/account');
+      }
     } catch (err: any) {
       console.error(err);
       if (err.code === 'auth/operation-not-allowed') {
         setError('Google authentication is not enabled in your Firebase project. Please enable it in the Firebase Console under Authentication -> Sign-in method.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+         setError('This domain is not authorized for Google Sign-In. Please add it to your Firebase Console under Authentication -> Settings -> Authorized domains.');
       } else {
-        setError('Google login failed. Please try again.');
+        setError('Google login failed. Please try again or add the current domain to Firebase authorized domains.');
       }
-    } finally {
       setIsLoading(false);
     }
   };
@@ -76,13 +107,13 @@ export const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Background Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full -ml-48 -mt-48 blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full -mr-48 -mb-48 blur-3xl" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full -ml-48 -mt-48 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full -mr-48 -mb-48 blur-3xl pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[440px]"
+        className="w-full max-w-[440px] relative z-10"
       >
         {/* Logo Section */}
         <div className="text-center mb-10">
@@ -269,10 +300,10 @@ export const Login: React.FC = () => {
               setIsLogin(!isLogin);
               setError(null);
             }}
-            className="text-sm font-medium text-slate-500"
+            className="w-full text-sm font-medium text-slate-600 py-4 px-4 rounded-2xl border border-slate-200 bg-white shadow-sm hover:bg-slate-50 active:bg-slate-100 transition-all flex items-center justify-center space-x-1 touch-manipulation"
           >
-            {isLogin ? "New to NextGenShop?" : "Already have an account?"}{' '}
-            <span className="text-blue-600 font-bold hover:underline ml-1">
+            <span>{isLogin ? "New to NextGenShop?" : "Already have an account?"}</span>
+            <span className="text-blue-600 font-bold hover:underline">
               {isLogin ? 'Create an account' : 'Sign in instead'}
             </span>
           </button>

@@ -36,13 +36,12 @@ export const Checkout: React.FC<CheckoutProps> = ({ cart, onRemoveFromCart, onCl
   const [deliveryTime, setDeliveryTime] = useState('standard');
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const shipping = cartTotal >= 100 ? 0 : 15.00; 
+  const shipping = cartTotal === 0 ? 0 : cartTotal >= 100 ? 0 : 15.00; 
   const tax = cartTotal * 0.08; 
   const total = cartTotal + shipping + tax;
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.firstName) newErrors.firstName = 'First name is required';
     if (!formData.phone) newErrors.phone = 'Phone number is required';
     if (!formData.address) newErrors.address = 'Address is required';
@@ -95,7 +94,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ cart, onRemoveFromCart, onCl
       orderId,
       userId: auth.currentUser.uid,
       customerName: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
+      email: auth.currentUser.email || formData.email || '',
       phone: formData.phone,
       address: `${formData.address}, ${formData.city}, ${formData.zipCode}, ${formData.country}`,
       items,
@@ -172,14 +171,6 @@ export const Checkout: React.FC<CheckoutProps> = ({ cart, onRemoveFromCart, onCl
                       <p className="text-xs font-bold">{error}</p>
                     </div>
                   )}
-                  <input
-                    name="email"
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`w-full px-6 py-4 rounded-2xl border ${errors.email ? 'border-red-400 bg-red-50/10' : 'border-gray-100 bg-gray-50/50'} focus:bg-white focus:border-brand-sage outline-none transition-all`}
-                  />
-                  {errors.email && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest pl-4">{errors.email}</p>}
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -366,8 +357,8 @@ export const Checkout: React.FC<CheckoutProps> = ({ cart, onRemoveFromCart, onCl
 
             <button 
               onClick={handleSubmit}
-              disabled={isLoading}
-              className={`w-full bg-brand-forest text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[12px] hover:bg-brand-sage transition-all shadow-2xl flex items-center justify-center space-x-4 group ${isLoading ? 'opacity-80' : ''}`}
+              disabled={isLoading || cart.length === 0}
+              className={`w-full bg-brand-forest text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[12px] hover:bg-brand-sage transition-all shadow-2xl flex items-center justify-center space-x-4 group ${(isLoading || cart.length === 0) ? 'opacity-80 cursor-not-allowed' : ''}`}
             >
               {isLoading ? (
                 <>
@@ -420,7 +411,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ cart, onRemoveFromCart, onCl
                 </div>
                 <div className="flex justify-between text-brand-forest/60">
                   <span className="font-medium">Shipping</span>
-                  <span className="font-bold text-brand-sage uppercase text-[10px] tracking-widest">Free</span>
+                  <span className="font-bold text-brand-sage uppercase text-[10px] tracking-widest">{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                 </div>
                 <div className="flex justify-between text-brand-forest/60">
                   <span className="font-medium">Estimated Tax</span>
