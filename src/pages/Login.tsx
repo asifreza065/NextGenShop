@@ -89,7 +89,6 @@ export const Login: React.FC = () => {
           <Link to="/" className="inline-block group">
              <h1 className="text-4xl font-serif italic font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">NextZenShop</h1>
           </Link>
-          <p className="text-slate-500 text-sm mt-3 font-medium">Your sustainable lifestyle choice.</p>
         </div>
 
         {/* Auth Card */}
