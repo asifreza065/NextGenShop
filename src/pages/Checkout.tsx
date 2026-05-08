@@ -359,7 +359,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ cart, onRemoveFromCart, onCl
               {paymentMethod === 'mobile' && (
                 <div className="p-8 bg-blue-50 rounded-[2rem] border border-blue-100 flex items-center justify-center space-x-3">
                   <ShieldCheck className="w-6 h-6 text-blue-500" />
-                  <span className="text-sm font-bold text-blue-700">NextZenShop Wallet / Apple Pay</span>
+                  <span className="text-sm font-bold text-blue-700">NextGenShop Wallet / Apple Pay</span>
                 </div>
               )}
             </section>

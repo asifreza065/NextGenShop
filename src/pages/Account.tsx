@@ -66,11 +66,11 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
   }, [activeTab]);
 
   const [wishlistItems, setWishlistItems] = useState(() => {
-    const saved = localStorage.getItem('nextzenshop_wishlist');
+    const saved = localStorage.getItem('nextgenshop_wishlist');
     return saved ? JSON.parse(saved) : [PRODUCTS[2], PRODUCTS[3]];
   });
   const [addressItems, setAddressItems] = useState(() => {
-    const saved = localStorage.getItem('nextzenshop_addresses');
+    const saved = localStorage.getItem('nextgenshop_addresses');
     return saved ? JSON.parse(saved) : [
       {
         id: '1',
@@ -84,7 +84,7 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
     ];
   });
   const [payments, setPayments] = useState(() => {
-    const saved = localStorage.getItem('nextzenshop_payments');
+    const saved = localStorage.getItem('nextgenshop_payments');
     return saved ? JSON.parse(saved) : [
       {
         id: '1',
@@ -97,15 +97,15 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
   });
 
   useEffect(() => {
-    localStorage.setItem('nextzenshop_wishlist', JSON.stringify(wishlistItems));
+    localStorage.setItem('nextgenshop_wishlist', JSON.stringify(wishlistItems));
   }, [wishlistItems]);
 
   useEffect(() => {
-    localStorage.setItem('nextzenshop_addresses', JSON.stringify(addressItems));
+    localStorage.setItem('nextgenshop_addresses', JSON.stringify(addressItems));
   }, [addressItems]);
 
   useEffect(() => {
-    localStorage.setItem('nextzenshop_payments', JSON.stringify(payments));
+    localStorage.setItem('nextgenshop_payments', JSON.stringify(payments));
   }, [payments]);
 
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean, type: 'wishlist' | 'address' | 'payment' | null, id: string | null }>({
@@ -142,7 +142,7 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
 
   // User data in state for editing
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('nextzenshop_user');
+    const saved = localStorage.getItem('nextgenshop_user');
     return saved ? JSON.parse(saved) : {
       name: auth.currentUser?.displayName || 'Alex Thompson',
       email: auth.currentUser?.email || 'alex.thompson@example.com',
@@ -172,7 +172,7 @@ export const Account: React.FC<{ cart: Product[], onRemoveFromCart: (id: string)
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('nextzenshop_user', JSON.stringify(user));
+    localStorage.setItem('nextgenshop_user', JSON.stringify(user));
   }, [user]);
 
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);

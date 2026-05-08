@@ -264,7 +264,7 @@ export const TrackOrder: React.FC<{ cart: Product[], onRemoveFromCart: (id: stri
                     <Truck className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold">NextZenShop Express</p>
+                    <p className="text-xs font-bold">NextGenShop Express</p>
                     <p className="text-[10px] text-white/40 uppercase tracking-widest">Premium Service</p>
                   </div>
                </div>
