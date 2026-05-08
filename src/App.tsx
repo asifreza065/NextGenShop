@@ -37,26 +37,26 @@ import Fuse from 'fuse.js';
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('nexora_products');
+    const saved = localStorage.getItem('nextzenshop_products');
     return saved ? JSON.parse(saved) : PRODUCTS;
   });
   const [cart, setCart] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('nexora_cart');
+    const saved = localStorage.getItem('nextzenshop_cart');
     return saved ? JSON.parse(saved) : [];
   });
   const [notification, setNotification] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem('nexora_admin_session') === 'true';
+    return localStorage.getItem('nextzenshop_admin_session') === 'true';
   });
   const location = useLocation();
 
   useEffect(() => {
-    localStorage.setItem('nexora_products', JSON.stringify(products));
+    localStorage.setItem('nextzenshop_products', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('nexora_cart', JSON.stringify(cart));
+    localStorage.setItem('nextzenshop_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function App() {
           products={products}
           isAdmin={isAdmin}
           onLogout={() => {
-            localStorage.removeItem('nexora_admin_session');
+            localStorage.removeItem('nextzenshop_admin_session');
             setIsAdmin(false);
           }}
         />

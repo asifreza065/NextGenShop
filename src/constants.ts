@@ -161,7 +161,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: '1',
     name: 'Jane Cooper',
     role: 'Nutritionist',
-    content: "Nexora's glass jars are awesome for storage, and the bamboo utensils are perfect for daily use!",
+    content: "NextZenShop's glass jars are awesome for storage, and the bamboo utensils are perfect for daily use!",
     rating: 5
   },
   {
@@ -175,7 +175,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: '3',
     name: 'Jacob Jones',
     role: 'Food Blogger',
-    content: "Love Nexora's eco-style! Glass jars keep things fresh, and bamboo utensils are so chic.",
+    content: "Love NextZenShop's eco-style! Glass jars keep things fresh, and bamboo utensils are so chic.",
     rating: 5
   }
 ];

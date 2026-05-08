@@ -9,9 +9,9 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-12 mb-20">
           <div className="col-span-1 md:col-span-2">
-            <h2 className="text-3xl font-serif italic font-semibold mb-6">Nexora</h2>
+            <h2 className="text-3xl font-serif italic font-semibold mb-6">NextZenShop</h2>
             <p className="text-brand-forest/60 max-w-md text-sm leading-loose">
-              Nexora promotes sustainable dining with beautifully crafted bamboo and glass <span className="font-serif italic font-medium text-brand-forest">✧ Kitchenware!</span>
+              NextZenShop promotes sustainable dining with beautifully crafted bamboo and glass <span className="font-serif italic font-medium text-brand-forest">✧ Kitchenware!</span>
               We believe every home deserves aesthetic pieces that don't compromise our planet's future.
             </p>
             <button className="mt-10 bg-brand-forest text-white px-8 py-3 rounded-full text-sm font-medium hover:bg-brand-sage transition-all flex items-center group">
@@ -43,9 +43,9 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-brand-accent/50 gap-6">
-           <h3 className="text-[12vw] leading-none font-serif italic text-brand-accent/40 font-bold select-none pointer-events-none">Nexora</h3>
+           <h3 className="text-[12vw] leading-none font-serif italic text-brand-accent/40 font-bold select-none pointer-events-none">NextZenShop</h3>
            <div className="flex flex-col items-center md:items-end space-y-2">
-              <p className="text-[10px] text-brand-forest/40 uppercase tracking-[0.3em] font-bold">© 2024 Nexora Studio</p>
+              <p className="text-[10px] text-brand-forest/40 uppercase tracking-[0.3em] font-bold">© 2024 NextZenShop Studio</p>
               <div className="flex space-x-6 text-[10px] text-brand-forest/60 uppercase tracking-widest font-bold">
                  <a href="#" className="hover:text-brand-sage">Privacy</a>
                  <a href="#" className="hover:text-brand-sage">Terms</a>

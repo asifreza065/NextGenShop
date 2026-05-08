@@ -87,7 +87,7 @@ export const Login: React.FC = () => {
         {/* Logo Section */}
         <div className="text-center mb-10">
           <Link to="/" className="inline-block group">
-             <h1 className="text-4xl font-serif italic font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">Nexora</h1>
+             <h1 className="text-4xl font-serif italic font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">NextZenShop</h1>
           </Link>
           <p className="text-slate-500 text-sm mt-3 font-medium">Your sustainable lifestyle choice.</p>
         </div>
@@ -107,7 +107,7 @@ export const Login: React.FC = () => {
               </h2>
               <p className="text-sm text-slate-500 mb-8 font-medium">
                 {isLogin 
-                  ? 'Use your Nexora Account' 
+                  ? 'Use your NextZenShop Account' 
                   : 'Join thousands of eco-conscious members'}
               </p>
 
@@ -272,7 +272,7 @@ export const Login: React.FC = () => {
             }}
             className="text-sm font-medium text-slate-500"
           >
-            {isLogin ? "New to Nexora?" : "Already have an account?"}{' '}
+            {isLogin ? "New to NextZenShop?" : "Already have an account?"}{' '}
             <span className="text-blue-600 font-bold hover:underline ml-1">
               {isLogin ? 'Create an account' : 'Sign in instead'}
             </span>

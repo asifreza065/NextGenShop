@@ -158,7 +158,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddToCart,
     : [];
 
   const loadHistory = () => {
-    const saved = localStorage.getItem('nexora_search_history');
+    const saved = localStorage.getItem('nextzenshop_search_history');
     if (saved) setHistory(JSON.parse(saved));
   };
 
@@ -169,22 +169,22 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddToCart,
   }, []);
 
   const clearHistory = () => {
-    localStorage.removeItem('nexora_search_history');
+    localStorage.removeItem('nextzenshop_search_history');
     setHistory([]);
   };
 
   const removeHistoryItem = (item: string) => {
     const newHistory = history.filter(h => h !== item);
-    localStorage.setItem('nexora_search_history', JSON.stringify(newHistory));
+    localStorage.setItem('nextzenshop_search_history', JSON.stringify(newHistory));
     setHistory(newHistory);
   };
 
   const handleLocalSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (localSearch.trim()) {
-      const history = JSON.parse(localStorage.getItem('nexora_search_history') || '[]');
+      const history = JSON.parse(localStorage.getItem('nextzenshop_search_history') || '[]');
       const newHistory = [localSearch, ...history.filter((h: string) => h !== localSearch)].slice(0, 5);
-      localStorage.setItem('nexora_search_history', JSON.stringify(newHistory));
+      localStorage.setItem('nextzenshop_search_history', JSON.stringify(newHistory));
       setShowLocalSuggestions(false);
       navigate(`/?search=${encodeURIComponent(localSearch)}`);
     }

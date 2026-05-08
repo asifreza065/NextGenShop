@@ -81,19 +81,19 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   
   useEffect(() => {
-    const history = JSON.parse(localStorage.getItem('nexora_search_history') || '[]');
+    const history = JSON.parse(localStorage.getItem('nextzenshop_search_history') || '[]');
     setRecentSearches(history);
   }, [showSuggestions]);
 
   const removeSearchHistoryItem = (item: string) => {
-    const history = JSON.parse(localStorage.getItem('nexora_search_history') || '[]');
+    const history = JSON.parse(localStorage.getItem('nextzenshop_search_history') || '[]');
     const newHistory = history.filter((h: string) => h !== item);
-    localStorage.setItem('nexora_search_history', JSON.stringify(newHistory));
+    localStorage.setItem('nextzenshop_search_history', JSON.stringify(newHistory));
     setRecentSearches(newHistory);
   };
 
   const clearSearchHistory = () => {
-    localStorage.removeItem('nexora_search_history');
+    localStorage.removeItem('nextzenshop_search_history');
     setRecentSearches([]);
   };
 
@@ -110,9 +110,9 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
 
   const addToHistory = (query: string) => {
     if (!query.trim()) return;
-    const history = JSON.parse(localStorage.getItem('nexora_search_history') || '[]');
+    const history = JSON.parse(localStorage.getItem('nextzenshop_search_history') || '[]');
     const newHistory = [query, ...history.filter((h: string) => h !== query)].slice(0, 5);
-    localStorage.setItem('nexora_search_history', JSON.stringify(newHistory));
+    localStorage.setItem('nextzenshop_search_history', JSON.stringify(newHistory));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -213,7 +213,7 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
 
           {/* Logo */}
           <Link to="/" className="flex-1 text-center md:flex-initial">
-            <h1 className="text-3xl font-serif italic font-semibold">Nexora</h1>
+            <h1 className="text-3xl font-serif italic font-semibold">NextZenShop</h1>
           </Link>
 
           {/* Actions */}
@@ -424,7 +424,7 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onRemoveFromCart, onSearch
             className="fixed inset-0 z-[60] bg-brand-cream p-8"
           >
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-serif italic font-semibold">Nexora</h2>
+              <h2 className="text-2xl font-serif italic font-semibold">NextZenShop</h2>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 bg-brand-forest/5 rounded-full"

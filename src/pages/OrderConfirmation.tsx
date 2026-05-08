@@ -106,7 +106,7 @@ export const OrderConfirmation: React.FC = () => {
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl font-serif italic text-white mb-4">Your order has been placed</h1>
-            <p className="text-white/80 text-lg font-medium">Thank you for choosing Nexora.</p>
+            <p className="text-white/80 text-lg font-medium">Thank you for choosing NextZenShop.</p>
           </div>
 
           <div className="p-8 md:p-12 space-y-12">
@@ -201,7 +201,7 @@ export const OrderConfirmation: React.FC = () => {
             <div className="bg-green-50 p-6 rounded-3xl text-center border border-green-100">
               <p className="text-[10px] font-black uppercase tracking-widest text-green-700 flex items-center justify-center">
                 <CreditCard className="w-4 h-4 mr-2" />
-                Payment Secured via Nexora SSL
+                Payment Secured via NextZenShop SSL
               </p>
             </div>
           </div>

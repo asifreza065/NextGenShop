@@ -39,7 +39,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
       const adminDoc = await getDoc(doc(db, 'admins', userCredential.user.uid));
       
       if (adminDoc.exists()) {
-        localStorage.setItem('nexora_admin_session', 'true');
+        localStorage.setItem('nextzenshop_admin_session', 'true');
         onLogin();
         navigate('/admin/orders');
       } else {
